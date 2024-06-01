@@ -11,7 +11,7 @@ private:
 	float speed;
 	int reboundCount;
 
-	void checkTopDownCollision();
+	
 
 public:
 
@@ -22,7 +22,10 @@ public:
 
 	void update();
 	bool checkCollisionPlayer(sf::FloatRect rect);
+	bool checkTopDownCollision();
 	void updateDir();
+
+	void reset();
 
 	void render(sf::RenderTarget& target);
 };

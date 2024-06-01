@@ -8,7 +8,8 @@ Player::Player(sf::Vector2f pos, sf::Keyboard::Key up, sf::Keyboard::Key down)
 	this->down = down;
 
 	p_shape.setPosition(pos);
-	p_shape.setSize(sf::Vector2f{ 10.f, 70.f });
+	startPos = pos;
+	p_shape.setSize(sf::Vector2f{ 10.f, 600.f });
 
 	dir = sf::Vector2f{ 0,0 };
 
@@ -27,6 +28,12 @@ void Player::update()
 	updateBordersColl();
 
 	p_shape.move(dir);
+}
+
+void Player::reset()
+{
+	p_shape.setPosition(startPos);
+	dir = sf::Vector2f{ 0, 0 };
 }
 
 

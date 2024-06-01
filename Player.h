@@ -8,10 +8,10 @@ private:
 
 	sf::Keyboard::Key up, down;
 	sf::Vector2f dir;
-	float speed = 5.f;
-	bool botPlayer;
+	float speed = 7.f;
 
 	sf::RectangleShape p_shape;
+	sf::Vector2f startPos;
 
 	void updatePlayer();
 
@@ -25,6 +25,8 @@ public:
 	sf::FloatRect getFRect() const;
 
 	void update();
+
+	void reset();
 	
 	void render(sf::RenderTarget& target);
 

@@ -37,16 +37,32 @@ bool Game::updateBotCollsion()
 	return false;
 }
 
+void Game::updateDestPos()
+{
+	
+	if (gameBall.getDir().y < 0) {
+		test.setPosition(sf::Vector2f{ shapes[0].getPosition().x + shapes[0].getGlobalBounds().width,
+	shapes[0].getPosition().y - shapes[0].getGlobalBounds().height});
+	}
+	else {
+		test.setPosition(sf::Vector2f{ shapes[0].getPosition().x + shapes[0].getGlobalBounds().width,
+	shapes[0].getPosition().y + shapes[0].getGlobalBounds().height});
+	}
+	
+	updateDest = false;
+}
+
 void Game::drawPlayerLine()
 {
+	//if ball hits upper of down borders of game field or hits player
 	if (updatePlayersBallCollision()) {
 		botsTurn = true;
 		gameBall.updateDir();
 		if (shapes.size() != 0) {
 			shapes.pop_back();
 		}
-		sf::RectangleShape line{ sf::Vector2f(800.f, 3.f) };
-		line.setPosition(gameBall.getPos().x + 25, gameBall.getPos().y);
+		sf::RectangleShape line{ sf::Vector2f(890.f, 3.f) };
+		line.setPosition(0, gameBall.getPos().y);
 		auto angle = atan(abs(gameBall.getDir().y) / gameBall.getDir().x) * 180 / 3.14;
 		if (gameBall.getDir().y < 0) {
 			line.setRotation(-angle);
@@ -56,6 +72,7 @@ void Game::drawPlayerLine()
 		}
 		shapes.push_back(line);
 	}
+	
 }
 
 void Game::initVars()
@@ -73,12 +90,12 @@ void Game::initVars()
 	bot1 = std::make_shared<Bot>();
 
 	botsTurn = false;
+	updateDest = true;
 
 	players.push_back(GamePlayer);
 
-	test = std::make_shared<sf::CircleShape>(2.5f);
-	test->setRadius(5.f);
-	test->setFillColor(sf::Color::Red);
+	test.setRadius(5.f);
+	test.setFillColor(sf::Color::Red);
 
 
 }
@@ -89,6 +106,31 @@ void Game::initWindow()
 
 	//set frame limit to 60
 	GameWindow->setFramerateLimit(60);
+}
+
+void Game::checkSidesCollision()
+{
+	if (gameBall.getPos().x > 900) {
+		std::cout << "Man score\n";
+		restartGame();
+	}
+	else if (gameBall.getPos().x < 0) {
+		std::cout << "Bot score\n";
+		restartGame();
+	}
+
+}
+
+void Game::restartGame()
+{
+	GamePlayer->reset();
+
+	gameBall.reset();
+
+	bot1->reset();
+
+	botsTurn = false;
+	updateDest = true;
 }
 
 //public scope
@@ -117,26 +159,49 @@ void Game::update()
 	}
 	if (bot1 != nullptr && shapes.size() != 0 && botsTurn) {
 	
-
-		if (gameBall.getDir().y < 0) {
-			test.setPosition(shapes[0].getPosition().x + shapes[0].getGlobalBounds().width + 70, shapes[0].getPosition().y -
-				shapes[0].getGlobalBounds().height - (bot1->getFRect().height / 2) * (1 + gameBall.getDir().y));
+		//if ball goes up
+		if (updateDest) {
+			updateDestPos();
 		}
-		else {
-			test.setPosition(shapes[0].getPosition().x + shapes[0].getGlobalBounds().width + 70, shapes[0].getPosition().y +
-				shapes[0].getGlobalBounds().height + (bot1->getFRect().height / 2) * (1+gameBall.getDir().y));
-		}
+			
 		
 		bot1->update(test);
 		if (updateBotCollsion()) {
 			gameBall.updateDir();
 			botsTurn = false;
+			updateDest = true;
 			shapes.pop_back();
 		}
 		
 	}
 
 	gameBall.update();
+
+	checkSidesCollision();
+
+	//chekc top down collision
+	if (gameBall.checkTopDownCollision()) {
+		botsTurn = true;
+		
+		//goes down after rebound of border
+		if (gameBall.getDir().y > 0) {
+			if (gameBall.getPos().y < 450) {
+				test.setPosition(sf::Vector2f{ bot1->getFRect().getPosition().x, bot1->getFRect().getPosition().y + bot1->getFRect().height * 3 });
+			}
+			else {
+				test.setPosition(sf::Vector2f{ bot1->getFRect().getPosition().x, bot1->getFRect().getPosition().y + bot1->getFRect().height * 2 });
+			}
+		}
+		else {
+			if (gameBall.getPos().y < 450) {
+				test.setPosition(sf::Vector2f{ bot1->getFRect().getPosition().x, bot1->getFRect().getPosition().y - bot1->getFRect().height * 2 });
+			}
+			else {
+				test.setPosition(sf::Vector2f{ bot1->getFRect().getPosition().x, bot1->getFRect().getPosition().y - bot1->getFRect().height });
+			}
+		}
+
+	}
 
 }
 

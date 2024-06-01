@@ -2,7 +2,7 @@
 #include "Ball.h"
 
 
-void Ball::checkTopDownCollision()
+bool Ball::checkTopDownCollision()
 {
 	if (c_shape.getGlobalBounds().getPosition().y < 0 ||
 		c_shape.getGlobalBounds().getPosition().y > 600 - c_shape.getGlobalBounds().height) {
@@ -15,7 +15,12 @@ void Ball::checkTopDownCollision()
 			dir.y++;
 		}
 		reboundCount++;
+		if (dir.x > 0) {
+			return true;
+		}
+		
 	}
+	return false;
 
 }
 
@@ -53,7 +58,6 @@ sf::Vector2f Ball::getDir() const
 
 void Ball::update()
 {
-	checkTopDownCollision();
 	c_shape.move(dir);
 }
 
@@ -73,10 +77,10 @@ void Ball::updateDir()
 	}
 
 	if (dir.y < 0) {
-		dir.y -= reboundCount / static_cast<float>(25);
+		dir.y -= reboundCount / static_cast<float>(10);
 	}
 	else {
-		dir.y += reboundCount / static_cast<float>(25);
+		dir.y += reboundCount / static_cast<float>(10);
 	}
 
 	if (dir.x < 0) {
@@ -86,6 +90,18 @@ void Ball::updateDir()
 		dir.x += reboundCount / static_cast<float>(25);
 	}
 	
+}
+
+void Ball::reset()
+{
+	std::cout << reboundCount << '\n';
+
+	dir = sf::Vector2f{ -speed, 0.f };
+
+	reboundCount = 0;
+
+	c_shape.setPosition(450, 300);
+
 }
 
 void Ball::render(sf::RenderTarget& target)

@@ -28,6 +28,7 @@ private:
 	Ball gameBall;
 
 	bool botsTurn;
+	bool updateDest;
 
 	void updateEvents();
 
@@ -35,10 +36,16 @@ private:
 	bool updatePlayersBallCollision();
 	bool updateBotCollsion();
 
+	void updateDestPos();
+
 	void drawPlayerLine();
 	//init stuff
 	void initVars();
 	void initWindow();
+
+	void checkSidesCollision();
+
+	void restartGame();
 
 public:
 
