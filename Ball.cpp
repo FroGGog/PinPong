@@ -75,7 +75,7 @@ void Ball::updateDir()
 	else {
 		dir.y = r;
 	}
-
+	// TODO : max speed is around 30 rebounds 
 	if (dir.y < 0) {
 		dir.y -= reboundCount / static_cast<float>(10);
 	}

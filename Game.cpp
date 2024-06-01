@@ -183,13 +183,13 @@ void Game::update()
 	if (gameBall.checkTopDownCollision()) {
 		botsTurn = true;
 		
-		//goes down after rebound of border
+		//bot goes down after rebound of border
 		if (gameBall.getDir().y > 0) {
 			if (gameBall.getPos().y < 450) {
-				test.setPosition(sf::Vector2f{ bot1->getFRect().getPosition().x, bot1->getFRect().getPosition().y + bot1->getFRect().height * 3 });
+				test.setPosition(sf::Vector2f{ bot1->getFRect().getPosition().x, bot1->getFRect().getPosition().y + bot1->getFRect().height * 2 });
 			}
 			else {
-				test.setPosition(sf::Vector2f{ bot1->getFRect().getPosition().x, bot1->getFRect().getPosition().y + bot1->getFRect().height * 2 });
+				test.setPosition(sf::Vector2f{ bot1->getFRect().getPosition().x, bot1->getFRect().getPosition().y + bot1->getFRect().height });
 			}
 		}
 		else {
