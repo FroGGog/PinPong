@@ -68,7 +68,7 @@ void Ball::updateDir()
 	//get random ball y direction
 	float r = static_cast <float> (rand()) / static_cast <float> (RAND_MAX);
 	// 50% change to change y dir from up to down and down to up
-	int x = rand() % (2 - 1 + 1) + 1;
+	int x = rand() % (3 - 1 + 1) + 1;
 	if (x == 1) {
 		dir.y = -r;
 	}
