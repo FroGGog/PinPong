@@ -9,7 +9,7 @@ Player::Player(sf::Vector2f pos, sf::Keyboard::Key up, sf::Keyboard::Key down)
 
 	p_shape.setPosition(pos);
 	startPos = pos;
-	p_shape.setSize(sf::Vector2f{ 10.f, 600.f });
+	p_shape.setSize(sf::Vector2f{ 10.f, 70.f });
 
 	dir = sf::Vector2f{ 0,0 };
 

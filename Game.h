@@ -23,7 +23,7 @@ private:
 	std::vector<std::shared_ptr<Player>> players;
 	std::vector<sf::RectangleShape> shapes;
 
-	sf::CircleShape test;
+	sf::CircleShape endPoint;
 
 	Ball gameBall;
 

@@ -41,11 +41,11 @@ void Game::updateDestPos()
 {
 	
 	if (gameBall.getDir().y < 0) {
-		test.setPosition(sf::Vector2f{ shapes[0].getPosition().x + shapes[0].getGlobalBounds().width,
+		endPoint.setPosition(sf::Vector2f{ shapes[0].getPosition().x + shapes[0].getGlobalBounds().width,
 	shapes[0].getPosition().y - shapes[0].getGlobalBounds().height});
 	}
 	else {
-		test.setPosition(sf::Vector2f{ shapes[0].getPosition().x + shapes[0].getGlobalBounds().width,
+		endPoint.setPosition(sf::Vector2f{ shapes[0].getPosition().x + shapes[0].getGlobalBounds().width,
 	shapes[0].getPosition().y + shapes[0].getGlobalBounds().height});
 	}
 	
@@ -94,8 +94,8 @@ void Game::initVars()
 
 	players.push_back(GamePlayer);
 
-	test.setRadius(5.f);
-	test.setFillColor(sf::Color::Red);
+	endPoint.setRadius(5.f);
+	endPoint.setFillColor(sf::Color::Red);
 
 
 }
@@ -165,7 +165,7 @@ void Game::update()
 		}
 			
 		
-		bot1->update(test);
+		bot1->update(endPoint);
 		if (updateBotCollsion()) {
 			gameBall.updateDir();
 			botsTurn = false;
@@ -185,19 +185,25 @@ void Game::update()
 		
 		//bot goes down after rebound of border
 		if (gameBall.getDir().y > 0) {
-			if (gameBall.getPos().y < 450) {
-				test.setPosition(sf::Vector2f{ bot1->getFRect().getPosition().x, bot1->getFRect().getPosition().y + bot1->getFRect().height * 2 });
+			if (gameBall.getPos().x < 450) {
+				endPoint.setPosition(sf::Vector2f{ bot1->getFRect().getPosition().x, bot1->getFRect().getPosition().y + bot1->getFRect().height * 2 });
+			}
+			else if (gameBall.getPos().x > 500) {
+				endPoint.setPosition(sf::Vector2f{ bot1->getFRect().getPosition().x, bot1->getFRect().getPosition().y + bot1->getFRect().height / 2});
 			}
 			else {
-				test.setPosition(sf::Vector2f{ bot1->getFRect().getPosition().x, bot1->getFRect().getPosition().y + bot1->getFRect().height });
+				endPoint.setPosition(sf::Vector2f{ bot1->getFRect().getPosition().x, bot1->getFRect().getPosition().y + bot1->getFRect().height });
 			}
 		}
 		else {
-			if (gameBall.getPos().y < 450) {
-				test.setPosition(sf::Vector2f{ bot1->getFRect().getPosition().x, bot1->getFRect().getPosition().y - bot1->getFRect().height * 2 });
+			if (gameBall.getPos().x < 450) {
+				endPoint.setPosition(sf::Vector2f{ bot1->getFRect().getPosition().x, bot1->getFRect().getPosition().y - bot1->getFRect().height * 2 });
+			}
+			else if (gameBall.getPos().x > 500) {
+				endPoint.setPosition(sf::Vector2f{ bot1->getFRect().getPosition().x, bot1->getFRect().getPosition().y + bot1->getFRect().height / 2 });
 			}
 			else {
-				test.setPosition(sf::Vector2f{ bot1->getFRect().getPosition().x, bot1->getFRect().getPosition().y - bot1->getFRect().height });
+				endPoint.setPosition(sf::Vector2f{ bot1->getFRect().getPosition().x, bot1->getFRect().getPosition().y - bot1->getFRect().height });
 			}
 		}
 
@@ -216,14 +222,8 @@ void Game::render()
 	if (bot1 != nullptr) {
 		bot1->render(*GameWindow);
 	}
-	
-	for (auto& i : shapes) {
-		GameWindow->draw(i);
-	}
 
 	gameBall.render(*GameWindow);
-
-	GameWindow->draw(test);
 
 	GameWindow->display();
 }

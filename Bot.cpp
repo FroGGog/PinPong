@@ -56,7 +56,6 @@ void Bot::update(sf::CircleShape destPoint)
 void Bot::render(sf::RenderTarget& target)
 {
 	target.draw(bot_shape);
-	target.draw(collBox);
 }
 
 void Bot::reset()

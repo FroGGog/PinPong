@@ -94,7 +94,6 @@ void Ball::updateDir()
 
 void Ball::reset()
 {
-	std::cout << reboundCount << '\n';
 
 	dir = sf::Vector2f{ -speed, 0.f };
 
