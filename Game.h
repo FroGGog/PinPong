@@ -22,13 +22,21 @@ private:
 
 	std::vector<std::shared_ptr<Player>> players;
 	std::vector<sf::RectangleShape> shapes;
+	std::vector<sf::Text> allText;
 
 	sf::CircleShape endPoint;
 
 	Ball gameBall;
 
+	//text stuff
+	sf::Font mainFont;
+	sf::Text playerScoreText;
+	sf::Text enemyScoreText;
+
 	bool botsTurn;
 	bool updateDest;
+
+	short pScore, eScore;
 
 	void updateEvents();
 
@@ -38,10 +46,15 @@ private:
 
 	void updateDestPos();
 
+	void updateText();
+
 	void drawPlayerLine();
 	//init stuff
 	void initVars();
 	void initWindow();
+
+	void initFonts();
+	void initTexts();
 
 	void checkSidesCollision();
 

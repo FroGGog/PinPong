@@ -52,6 +52,18 @@ void Game::updateDestPos()
 	updateDest = false;
 }
 
+void Game::updateText()
+{
+	std::stringstream ss;
+	ss << std::to_string(pScore);
+	playerScoreText.setString(ss.str());
+
+	std::ostringstream ss2;
+	ss2 << std::to_string(eScore);
+	enemyScoreText.setString(ss2.str());
+
+}
+
 void Game::drawPlayerLine()
 {
 	//if ball hits upper of down borders of game field or hits player
@@ -97,6 +109,9 @@ void Game::initVars()
 	endPoint.setRadius(5.f);
 	endPoint.setFillColor(sf::Color::Red);
 
+	pScore = 0;
+	eScore = 0;
+
 
 }
 
@@ -108,16 +123,49 @@ void Game::initWindow()
 	GameWindow->setFramerateLimit(60);
 }
 
+void Game::initFonts()
+{
+	if (!mainFont.loadFromFile("pingpong.regular.ttf")) {
+		std::clog << "ERROR::CANTLOADFONT::pingpong\n";
+	}
+
+}
+
+void Game::initTexts()
+{
+	playerScoreText.setFont(mainFont);
+	playerScoreText.setCharacterSize(24);
+	playerScoreText.setPosition(10.f, 10.f);
+
+	enemyScoreText.setFont(mainFont);
+	enemyScoreText.setCharacterSize(24);
+	enemyScoreText.setPosition(880.f, 10.f);
+
+	//set text to Text
+	std::stringstream ss;
+	ss << std::to_string(pScore);
+	playerScoreText.setString(ss.str());
+	
+
+	std::stringstream ss2;
+	ss2 << std::to_string(eScore);
+	enemyScoreText.setString(ss2.str());
+
+}
+
 void Game::checkSidesCollision()
 {
 	if (gameBall.getPos().x > 900) {
+		pScore++;
 		std::cout << "Man score\n";
 		restartGame();
 	}
 	else if (gameBall.getPos().x < 0) {
+		eScore++;
 		std::cout << "Bot score\n";
 		restartGame();
 	}
+	
 
 }
 
@@ -131,6 +179,8 @@ void Game::restartGame()
 
 	botsTurn = false;
 	updateDest = true;
+
+	updateText();
 }
 
 //public scope
@@ -139,6 +189,9 @@ Game::Game()
 {
 	initVars();
 	initWindow();
+
+	initFonts();
+	initTexts();
 }
 
 bool Game::isOpen() const
@@ -224,6 +277,9 @@ void Game::render()
 	}
 
 	gameBall.render(*GameWindow);
+
+	GameWindow->draw(playerScoreText);
+	GameWindow->draw(enemyScoreText);
 
 	GameWindow->display();
 }
