@@ -1,0 +1,57 @@
+cmake_minimum_required(VERSION 3.16)
+
+project(PinPong LANGUAGES CXX)
+
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
+option(BUILD_SHARED_LIBS "Build shared libraires" OFF)
+
+include(FetchContent)
+FetchContent_Declare(SFML
+    GIT_REPOSITORY https://github.com/SFML/SFML.git
+    GIT_TAG 2.6.x)
+FetchContent_MakeAvailable(SFML)
+
+set(SOURCE_FILES
+
+    "src/main.cpp"
+
+    "src/Ball.cpp"
+    "src/Ball.h"
+
+    "src/Bot.cpp"
+    "src/Bot.h"
+
+    "src/Game.cpp"
+    "src/Game.h"
+
+    "src/Player.cpp"
+    "src/Player.h"
+
+    "src/main.cpp"
+)
+
+add_executable(PinPong ${SOURCE_FILES})
+target_link_libraries(PinPong PRIVATE sfml-graphics)
+target_compile_features(PinPong PRIVATE cxx_std_17)
+
+# add precomplide headers
+target_precompile_headers(PinPong PRIVATE src/stdafx.h)
+
+# add all files wich must be copyied in build dir
+set(COPY_FILES "${CMAKE_SOURCE_DIR}/src/pingpong.regular.ttf")
+
+
+# Copy font file to build dir
+add_custom_command(TARGET PinPong POST_BUILD
+    COMMAND ${CMAKE_COMMAND} -E copy ${COPY_FILES} $<TARGET_FILE_DIR:PinPong>
+    COMMENT "Copying files to output directory"
+)
+
+
+if(WIN32)
+    add_custom_command(
+        TARGET PinPong
+        COMMENT "Copy OpenAL DLL"
+        PRE_BUILD COMMAND ${CMAKE_COMMAND} -E copy ${SFML_SOURCE_DIR}/extlibs/bin/$<IF:$<EQUAL:${CMAKE_SIZEOF_VOID_P},8>,x64,x86>/openal32.dll $<TARGET_FILE_DIR:PinPong>
+        VERBATIM)
+endif()

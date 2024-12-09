@@ -30,6 +30,8 @@
 *.exe
 *.out
 *.app
-/.vs/PinPong
+/.vs
+/out
+.vscode/
 /x64/Debug
-/PinPong/x64/Debug
+/build
